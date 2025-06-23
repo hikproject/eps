@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('cd_customer')->unique();
             $table->string('nm_customer');
+            $table->string('address');
             $table->timestamps();
         });
     }

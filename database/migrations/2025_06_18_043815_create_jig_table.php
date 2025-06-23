@@ -18,9 +18,9 @@ return new class extends Migration
             $table->string('costumer');
             $table->string('part_number');
             $table->string('type_jig');
-            $table->timestamps( );
+            $table->timestamps();
 
-            $table->foreign('PPAM_id')->references('id')->on('ppam');
+            $table->foreign('PPAM_id')->references('id')->on('detail_PPAM');
         });
     }
 

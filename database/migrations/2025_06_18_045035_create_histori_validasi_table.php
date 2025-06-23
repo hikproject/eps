@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('histori_validasi', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('id_jig');
+            $table->string('status');
             $table->timestamps( );
 
             $table->foreign('id_jig')->references('id')->on('jig');
