@@ -214,6 +214,7 @@
       </div>
     </div>
   </footer>
+  @include('sweetalert::alert')
 
   <!-- Required Js -->
   <script src="{{ asset('assets/js/plugins/popper.min.js') }}"></script>

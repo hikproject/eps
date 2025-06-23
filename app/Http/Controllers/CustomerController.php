@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
+use RealRashid\SweetAlert\Facades\Alert;
+
 
 class CustomerController extends Controller
 {
@@ -42,9 +44,11 @@ class CustomerController extends Controller
 
         try {
             Customer::create($request->all());
-            return redirect()->route('customers.index')->with('success', 'Customer berhasil ditambahkan');
+            Alert::success('Sukses', 'Customer berhasil ditambahkan');
+            return redirect()->route('customers.index');
         } catch (\Exception $e) {
-            return back()->with('error', 'Gagal menambahkan customer: ' . $e->getMessage());
+            Alert::error('Gagal', 'Gagal menambahkan customer: ' . $e->getMessage());
+            return back();
         }
     }
 
@@ -65,13 +69,13 @@ class CustomerController extends Controller
             // Ambil data customer berdasarkan ID
             $customers = Customer::findOrFail($id);
 
-            // Return view edit dengan data costumer
+            // Return view edit dengan data customer
             return view('admin.customers.edit', compact('customers'));
 
         } catch (\Exception $e) {
-            // Tangani error jika user tidak ditemukan
-            return redirect()->route('customers.index')
-                ->with('error', 'Customer tidak ditemukan. Error: ' . $e->getMessage());
+            // Tangani error jika customer tidak ditemukan menggunakan SweetAlert
+            Alert::error('Error', 'Customer tidak ditemukan: ' . $e->getMessage());
+            return redirect()->route('customers.index');
         }
     }
 
@@ -84,12 +88,15 @@ class CustomerController extends Controller
             $request->validate([
                 'cd_customer' => 'required|unique:customers,cd_customer,' . $customer->id,
                 'nm_customer' => 'required',
+                'address' => 'required'
             ]);
 
             $customer->update($request->all());
-            return redirect()->route('customers.index')->with('success', 'Customer berhasil diubah');
+            Alert::success('Sukses', 'Customer berhasil diubah');
+            return redirect()->route('customers.index');
         } catch (\Exception $e) {
-            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            Alert::error('Gagal', 'Gagal mengupdate customer: ' . $e->getMessage());
+            return back();
         }
     }
 
@@ -102,6 +109,9 @@ class CustomerController extends Controller
         // Hapus data customer dari database
         $customer->delete();
         
+        // Menggunakan SweetAlert untuk notifikasi sukses
+        Alert::success('Sukses', 'Customer berhasil dihapus');
+        
         // Return response JSON untuk AJAX
         return response()->json([
             'success' => true,
@@ -109,6 +119,9 @@ class CustomerController extends Controller
         ]);
         
     } catch (\Exception $e) {
+        // Menggunakan SweetAlert untuk notifikasi error
+        Alert::error('Gagal', 'Gagal menghapus customer: ' . $e->getMessage());
+        
         // Return response error jika terjadi kesalahan
         return response()->json([
             'success' => false,

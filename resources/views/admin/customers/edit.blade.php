@@ -25,7 +25,30 @@
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-            <button type="submit" class="btn btn-primary">Simpan</button>
+            <button type="button" class="btn btn-primary" onclick="confirmUpdate()">Simpan</button>
         </div>
     </form>
 </div>
+
+<script>
+function confirmUpdate() {
+    $('#customerModal').modal('hide');
+    Swal.fire({
+        title: 'Konfirmasi',
+        text: "Apakah Anda yakin ingin menyimpan perubahan data customer?",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Ya, Simpan!',
+        cancelButtonText: 'Batal'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById('customerForm').submit();
+        } else {
+            // Buka kembali modal jika user memilih batal
+            $('#customerModal').modal('show');
+        }
+    });
+}
+</script>

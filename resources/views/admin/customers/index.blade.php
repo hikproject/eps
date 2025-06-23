@@ -21,8 +21,6 @@
     </div>
   </div>
   <!-- [ breadcrumb ] end -->
-  {{-- Flash Messages --}}
-  @include('Layout.flash')
       <!-- [ Main Content ] start -->
       <div class="row">
         <!-- [ sample-page ] start -->

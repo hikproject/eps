@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('id_jig');
             $table->string('status');
+            $table->string('detail');
             $table->timestamps( );
 
             $table->foreign('id_jig')->references('id')->on('jig');
