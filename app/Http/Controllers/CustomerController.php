@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use RealRashid\SweetAlert\Facades\Alert;
 
-
 class CustomerController extends Controller
 {
     /**
@@ -36,19 +35,28 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'cd_customer' => 'required|unique:customers,cd_customer',
-            'nm_customer' => 'required',
-            'address' => 'required'
-        ]);
-
         try {
+            $request->validate([
+                'cd_customer' => 'required|unique:customers,cd_customer',
+                'name' => 'required',
+                'address_office' => 'required',
+                'address_storage' => 'required'
+            ]);
+            
             Customer::create($request->all());
             Alert::success('Sukses', 'Customer berhasil ditambahkan');
             return redirect()->route('customers.index');
+            
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            if ($e->validator->errors()->has('cd_customer')) {
+                Alert::error('Gagal', 'Kode Customer sudah digunakan');
+            } else {
+                Alert::error('Gagal', $e->getMessage());
+            }
+            return redirect()->route('customers.index');
         } catch (\Exception $e) {
-            Alert::error('Gagal', 'Gagal menambahkan customer: ' . $e->getMessage());
-            return back();
+            Alert::error('Gagal', $e->getMessage());
+            return redirect()->route('customers.index');
         }
     }
 
@@ -66,15 +74,10 @@ class CustomerController extends Controller
     public function edit($id)
     {
         try {
-            // Ambil data customer berdasarkan ID
             $customers = Customer::findOrFail($id);
-
-            // Return view edit dengan data customer
             return view('admin.customers.edit', compact('customers'));
-
         } catch (\Exception $e) {
-            // Tangani error jika customer tidak ditemukan menggunakan SweetAlert
-            Alert::error('Error', 'Customer tidak ditemukan: ' . $e->getMessage());
+            Alert::error('Error', $e->getMessage());
             return redirect()->route('customers.index');
         }
     }
@@ -86,16 +89,18 @@ class CustomerController extends Controller
     {
         try {
             $request->validate([
-                'cd_customer' => 'required|unique:customers,cd_customer,' . $customer->id,
-                'nm_customer' => 'required',
-                'address' => 'required'
+                'cd_customer' => 'required|unique:customers,cd_customer,'.$customer->id,
+                'name' => 'required',
+                'address_office' => 'required',
+                'address_storage' => 'required'
             ]);
 
             $customer->update($request->all());
-            Alert::success('Sukses', 'Customer berhasil diubah');
+            Alert::success('Sukses', 'Customer berhasil diupdate');
             return redirect()->route('customers.index');
+            
         } catch (\Exception $e) {
-            Alert::error('Gagal', 'Gagal mengupdate customer: ' . $e->getMessage());
+            Alert::error('Gagal', $e->getMessage());
             return back();
         }
     }
@@ -105,28 +110,19 @@ class CustomerController extends Controller
      */
     public function destroy(Customer $customer)
     {
-    try {
-        // Hapus data customer dari database
-        $customer->delete();
-        
-        // Menggunakan SweetAlert untuk notifikasi sukses
-        Alert::success('Sukses', 'Customer berhasil dihapus');
-        
-        // Return response JSON untuk AJAX
-        return response()->json([
-            'success' => true,
-            'message' => 'Customer berhasil dihapus'
-        ]);
-        
-    } catch (\Exception $e) {
-        // Menggunakan SweetAlert untuk notifikasi error
-        Alert::error('Gagal', 'Gagal menghapus customer: ' . $e->getMessage());
-        
-        // Return response error jika terjadi kesalahan
-        return response()->json([
-            'success' => false,
-            'message' => 'Gagal menghapus customer: ' . $e->getMessage()
-        ], 500);
-    }
+        try {
+            $customer->delete();
+            Alert::success('Sukses', 'Customer berhasil dihapus');
+            return response()->json([
+                'success' => true,
+                'message' => 'Customer berhasil dihapus'
+            ]);
+        } catch (\Exception $e) {
+            Alert::error('Gagal', $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 }

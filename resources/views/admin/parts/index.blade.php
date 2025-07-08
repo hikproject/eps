@@ -1,5 +1,5 @@
 @extends('Layout.main')
-@section('title', 'Customers')
+@section('title', 'Parts')
 @section('content')
 <div class="pc-container">
     <div class="pc-content">
@@ -9,12 +9,12 @@
       <div class="row align-items-center">
         <div class="col-md-12">
           <div class="page-header-title">
-            <h5 class="m-b-10">Customer</h5>
+            <h5 class="m-b-10">Part</h5>
           </div>
           <ul class="breadcrumb">
             <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
             <li class="breadcrumb-item"><a href="javascript: void(0)">Data Master</a></li>
-            <li class="breadcrumb-item" aria-current="page">Customer</li>
+            <li class="breadcrumb-item" aria-current="page">Part</li>
           </ul> 
         </div>
       </div>
@@ -27,19 +27,18 @@
         <div class="col-md-12">
           <div class="card">
             <div class="card-body">
-              <h6 class="mb-2 f-w-400">Data Customer</h6>
+              <h6 class="mb-2 f-w-400">Data Part</h6>
               <br>
-              <button class="btn btn-primary" onclick="openCustomerModal('{{ route('customers.create') }}')">Tambah Customer</button>
+              <button class="btn btn-primary" onclick="openPartModal('{{ route('parts.create') }}')">Tambah Part</button>
               <br>
               <br>
               <div class="table-responsive">
-                <table class="table table-striped table-bordered" id="customersTable">
+                <table class="table table-striped table-bordered" id="partsTable">
                   <thead>
                     <tr>
                       <th>Kode Customer</th>
-                      <th>Nama Customer</th>
-                      <th>Alamat Kantor</th>
-                      <th>Alamat Gudang</th>
+                      <th>Customer</th>
+                      <th>Part Number</th>
                       <th>Action</th>
                     </tr>
                   </thead>
@@ -50,11 +49,11 @@
         </div>
       </div>
       <!-- Modal Utama -->
-    <div class="modal fade" id="customerModal" tabindex="-1" aria-labelledby="customerModalLabel" aria-hidden="true">
+    <div class="modal fade" id="partModal" tabindex="-1" aria-labelledby="partModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="customerModalLabel">Form Customer</h5>
+            <h5 class="modal-title" id="partModalLabel">Form Part</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body" id="modalContent">
@@ -70,20 +69,19 @@
 @section('script')
 <script>
   $(document).ready(function() {
-    $('#customersTable').DataTable({
+    $('#partsTable').DataTable({
       processing: true,
       serverSide: true,
-      ajax: "{{ route('customers.data') }}",
+      ajax: "{{ route('parts.data') }}",
       lengthChange: true,
       pageLength: 10,
       scrollY: '400px',
       scrollCollapse: true,
       paging: true,
       columns: [
-        { data: 'cd_customer', name: 'cd_customer' },
-        { data: 'name', name: 'name' },
-        { data: 'address_office', name: 'address_office'},
-        { data: 'address_storage', name: 'address_storage'},
+        { data: 'customer.cd_customer', name: 'customer.cd_customer' },
+        { data: 'customer.nm_customer', name: 'customer.nm_customer' },
+        { data: 'part_number', name: 'part_number' },
         {
           data: 'action', 
           name: 'action',
@@ -92,33 +90,35 @@
           render: function(data, type, row) {
             return `
               <div class="d-flex gap-2">
-                <button class="btn btn-sm btn-info" data-bs-toggle="tooltip" title="Edit" onclick="openCustomerModal('customers/' +${row.id} + '/edit')">
-                  <i class="ti ti-edit"></i>  
-                </button>
-                <button class="btn btn-sm btn-danger" data-bs-toggle="tooltip" title="Hapus" onclick="deleteCustomer(${row.id})">
+                <button class="btn btn-sm btn-danger" data-bs-toggle="tooltip" title="Hapus" onclick="deletePart(${row.id})">
                   <i class="ti ti-trash"></i>
                 </button>
               </div>
             `;
           }
         }
-      ]
+      ],
+      columnControl: ['searchDropdown'],
+      columnDefs: [{
+        target: -1,
+        columnControl: []
+    }],
     });
   });
 </script>
 <script>
-  function openCustomerModal(url) {
+  function openPartModal(url) {
     $.get(url, function(data) {
       $('#modalContent').html(data);
-      $('#customerModal').modal('show');
+      $('#partModal').modal('show');
     });
   }
 </script>
 <script>
-function deleteCustomer(id) {
+function deletePart(id) {
     Swal.fire({
         title: 'Apakah Anda yakin?',
-        text: "Data customer akan dihapus secara permanen!",
+        text: "Data part akan dihapus secara permanen!",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -133,14 +133,14 @@ function deleteCustomer(id) {
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
-                url: '/customers/' + id,
+                url: '/parts/' + id,
                 type: 'DELETE',
                 data: {
                     _token: '{{ csrf_token() }}'
                 },
                 success: function(response) {
                     if (response.success) {
-                        $('#customersTable').DataTable().ajax.reload();
+                        $('#partsTable').DataTable().ajax.reload();
                         Swal.fire({
                             title: 'Berhasil!',
                             text: response.message,

@@ -9,16 +9,23 @@
             @enderror
         </div>
         <div class="mb-3">
-            <label for="nm_customer" class="form-label">Nama Customer</label>
-            <input type="text" class="form-control" id="nm_customer" name="nm_customer" required>
-            @error('nm_customer')
+            <label for="name" class="form-label">Nama Customer</label>
+            <input type="text" class="form-control" id="name" name="name" required>
+            @error('name')
                 <div class="text-danger">{{ $message }}</div>
             @enderror
         </div>
         <div class="mb-3">
-            <label for="address" class="form-label">Alamat</label>
-            <input type="text" class="form-control" id="address" name="address" required>
-            @error('address')
+            <label for="address_office" class="form-label">Alamat Kantor</label>
+            <input type="text" class="form-control" id="address_office" name="address_office" required>
+            @error('address_office')
+                <div class="text-danger">{{ $message }}</div>
+            @enderror
+        </div>
+        <div class="mb-3">
+            <label for="address_storage" class="form-label">Alamat Gudang</label>
+            <input type="text" class="form-control" id="address_storage" name="address_storage" required>
+            @error('address_storage')
                 <div class="text-danger">{{ $message }}</div>
             @enderror
         </div>

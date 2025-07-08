@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\PartController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,6 +23,8 @@ Route::get('/dashboard', function () {
 });
 Route::resource('customers', CustomerController::class)->names('customers');
 Route::get('customersdata', [CustomerController::class, 'data'])->name('customers.data');
+Route::resource('parts', PartController::class)->names('parts');
+Route::get('partsdata', [PartController::class, 'data'])->name('parts.data');
 
 
 

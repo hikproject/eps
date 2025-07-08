@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('status');
             $table->timestamp('created_at')->nullable();
             $table->foreign('cd_ppam')->references('cd_ppam')->on('PPAM');
-            $table->foreign('part_number')->references('part_number')->on('parts');
+            $table->foreign('part_number')->references('pn_leoco')->on('parts');
             $table->foreign('type_jig')->references('id')->on('type_jigs');
             $table->foreign('cd_plant')->references('id')->on('plants');
         });

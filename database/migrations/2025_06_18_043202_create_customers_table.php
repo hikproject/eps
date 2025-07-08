@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
-            $table->string('cd_customer')->unique();
-            $table->string('nm_customer');
-            $table->string('address');
+            $table->string('cd_customer')->unique(); // Ditambahkan unique() untuk foreign key constraint
+            $table->string('name');
+            $table->string('address_office');
+            $table->string('address_storage');
             $table->timestamps();
         });
     }

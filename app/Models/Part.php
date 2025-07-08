@@ -5,19 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Customer extends Model
+class Part extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'cd_customer',
-        'name',
-        'address_office',
-        'address_storage'
+        'part_number'
     ];
 
-    public function parts()
+    public function customer()
     {
-        return $this->hasMany(Part::class, 'cd_customer', 'cd_customer');
+        return $this->belongsTo(Customer::class, 'cd_customer', 'cd_customer');
     }
 }
