@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('receiver');
             $table->timestamps( );
 
-            $table->foreign('cd_ppam')->references('cd_ppam')->on('ppam');
+            $table->foreign('cd_ppam')->references('cd_ppam')->on('PPAM');
         });
     }
 
