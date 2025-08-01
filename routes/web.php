@@ -23,8 +23,11 @@ Route::get('/dashboard', function () {
 });
 Route::resource('customers', CustomerController::class)->names('customers');
 Route::get('customersdata', [CustomerController::class, 'data'])->name('customers.data');
+// Route::get(customers/)->name('customers.import');
+
 Route::resource('parts', PartController::class)->names('parts');
 Route::get('partsdata', [PartController::class, 'data'])->name('parts.data');
+
 
 
 

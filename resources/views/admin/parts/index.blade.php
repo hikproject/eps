@@ -15,7 +15,7 @@
             <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
             <li class="breadcrumb-item"><a href="javascript: void(0)">Data Master</a></li>
             <li class="breadcrumb-item" aria-current="page">Part</li>
-          </ul> 
+          </ul>
         </div>
       </div>
     </div>
@@ -36,9 +36,11 @@
                 <table class="table table-striped table-bordered" id="partsTable">
                   <thead>
                     <tr>
-                      <th>Kode Customer</th>
                       <th>Customer</th>
+                      <th>Model</th>
+                      <th>Part Name</th>
                       <th>Part Number</th>
+                      <th>Leoco P/N</th>
                       <th>Action</th>
                     </tr>
                   </thead>
@@ -79,11 +81,13 @@
       scrollCollapse: true,
       paging: true,
       columns: [
-        { data: 'customer.cd_customer', name: 'customer.cd_customer' },
-        { data: 'customer.nm_customer', name: 'customer.nm_customer' },
-        { data: 'part_number', name: 'part_number' },
+        { data: 'customer.cd_name', name: 'customer.name' },
+        { data: 'model', name: 'model' },
+        { data: 'part_name', name: 'part_name' },
+        { data: 'pn_customer', name: 'pn_customer' },
+        { data: 'pn_leoco', name: 'pn_leoco' },
         {
-          data: 'action', 
+          data: 'action',
           name: 'action',
           orderable: false,
           searchable: false,
